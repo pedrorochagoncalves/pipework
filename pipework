@@ -378,7 +378,7 @@ case "$DHCP_CLIENT" in
     [ "$GATEWAY" ] && {
       ip netns exec "$NSPID" ip "$FAMILY_FLAG" route get "$GATEWAY" >/dev/null 2>&1 || \
       ip netns exec "$NSPID" ip "$FAMILY_FLAG" route add "$GATEWAY/32" dev "$CONTAINER_IFNAME"
-      ip netns exec "$NSPID" ip "$FAMILY_FLAG" route replace default via "$GATEWAY"
+      ip netns exec "$NSPID" ip "$FAMILY_FLAG" route replace default via "$GATEWAY" dev "$CONTAINER_IFNAME"
     }
     ;;
 esac
