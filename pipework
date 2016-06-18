@@ -375,6 +375,13 @@ case "$DHCP_CLIENT" in
       ip netns exec "$NSPID" ip "$FAMILY_FLAG" route delete default >/dev/null 2>&1 && true
     }
     ip netns exec "$NSPID" ip "$FAMILY_FLAG" link set "$CONTAINER_IFNAME" up
+
+    # Under certain conditions, the previous command adds unwanted IPv6 routes even when specifying IPv4
+    # address family. This will clean all IPv6 routes if it adds any when configuring the IPv4 addresses.
+    if [ "$FAMILY_FLAG" = "-4"]
+      ip netns exec "$NSPID" ip -6 route flush table all
+    fi
+
     [ "$GATEWAY" ] && {
       ip netns exec "$NSPID" ip "$FAMILY_FLAG" route get "$GATEWAY" >/dev/null 2>&1 || \
       ip netns exec "$NSPID" ip "$FAMILY_FLAG" route add "$GATEWAY/32" dev "$CONTAINER_IFNAME"
