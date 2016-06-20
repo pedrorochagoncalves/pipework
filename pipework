@@ -378,7 +378,7 @@ case "$DHCP_CLIENT" in
 
     # Under certain conditions, the previous command adds unwanted IPv6 routes even when specifying IPv4
     # address family. This will clean all IPv6 routes if it adds any when configuring the IPv4 addresses.
-    if [ "$FAMILY_FLAG" = "-4"]
+    if [ "$FAMILY_FLAG" = "-4"]; then
       ip netns exec "$NSPID" ip -6 route flush table all dev "$CONTAINER_IFNAME"
     fi
 
